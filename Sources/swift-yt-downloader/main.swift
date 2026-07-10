@@ -23,4 +23,5 @@ try await bot.add(dispatcher: YouTubeDispatcher(bot: bot, logger: logger))
 print("Starting swift-yt-downloader bot...")
 try await bot.start()
 
-dispatchMain()
+// long polling runs in a detached Task, keep the process alive
+try await withCheckedThrowingContinuation { (_: CheckedContinuation<Void, any Error>) in }
