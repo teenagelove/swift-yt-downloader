@@ -29,6 +29,7 @@ if let portStr = ProcessInfo.processInfo.environment["PORT"], !portStr.isEmpty {
 var logger = Logger(label: "swift-yt-downloader")
 logger.logLevel = .info
 
+print("Creating TGBot with longpolling...")
 let bot = try await TGBot(
     connectionType: .longpolling(),
     tgClient: TGClientDefault(),
@@ -36,8 +37,16 @@ let bot = try await TGBot(
     botId: botId,
     log: logger
 )
+print("TGBot created successfully")
 
+print("Adding dispatcher...")
 try await bot.add(dispatcher: YouTubeDispatcher(bot: bot, logger: logger))
+print("Dispatcher added")
 
 print("Starting swift-yt-downloader bot...")
-try await bot.start()
+do {
+    try await bot.start()
+    print("bot.start() returned")
+} catch {
+    print("bot.start() failed with error: \(error)")
+}
