@@ -11,6 +11,7 @@ class YouTubeDispatcher: TGDefaultDispatcher, @unchecked Sendable {
     override func handle() async {
         await add(TGCommandHandler(commands: [Constants.Bot.start, Constants.Bot.help]) { [weak self] update in
             guard let bot = self?.bot else { return }
+            print("Received /start or /help command")
             let params = TGSendMessageParams(
                 chatId: .chat(update.message?.chat.id ?? 0),
                 text: Constants.Messages.help
@@ -19,9 +20,15 @@ class YouTubeDispatcher: TGDefaultDispatcher, @unchecked Sendable {
         })
 
         await add(TGBaseHandler({ [weak self] update in
+            print("Received update: \(String(describing: update.updateId))")
             guard let bot = self?.bot,
                   let text = update.message?.text,
-                  let chatId = update.message?.chat.id else { return }
+                  let chatId = update.message?.chat.id else {
+                print("No text or chatId in update")
+                return
+            }
+
+            print("Processing message: \(text) from chat: \(chatId)")
 
             guard YouTubeDownloader.isYouTubeURL(text) else {
                 let params = TGSendMessageParams(chatId: .chat(chatId), text: Constants.Messages.notALink)
