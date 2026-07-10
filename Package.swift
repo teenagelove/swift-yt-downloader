@@ -1,4 +1,4 @@
-// swift-tools-version: 6.3
+// swift-tools-version: 6.1
 
 import PackageDescription
 
@@ -9,7 +9,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/nerzh/swift-telegram-bot.git", from: "4.0.0"),
-        .package(url: "https://github.com/swiftlang/swift-subprocess.git", from: "0.4.0")
+        .package(url: "https://github.com/swiftlang/swift-subprocess.git", "0.4.0"..<"0.5.0")
     ],
     targets: [
         .executableTarget(
