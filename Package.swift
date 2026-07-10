@@ -9,14 +9,19 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/nerzh/swift-telegram-bot.git", from: "10.0.0"),
-        .package(url: "https://github.com/swiftlang/swift-subprocess.git", "0.4.0"..<"0.5.0")
+        .package(url: "https://github.com/swiftlang/swift-subprocess.git", "0.4.0"..<"0.5.0"),
+        .package(url: "https://github.com/swift-server/swift-service-lifecycle.git", from: "2.0.0")
     ],
     targets: [
         .executableTarget(
             name: "swift-yt-downloader",
             dependencies: [
                 .product(name: "SwiftTelegramBot", package: "swift-telegram-bot"),
-                .product(name: "Subprocess", package: "swift-subprocess")
+                .product(name: "Subprocess", package: "swift-subprocess"),
+                .product(name: "ServiceLifecycle", package: "swift-service-lifecycle")
+            ],
+            swiftSettings: [
+                .unsafeFlags(["-parse-as-library"])
             ]
         )
     ]
