@@ -10,6 +10,12 @@ guard let botId = ProcessInfo.processInfo.environment[Constants.Environment.tele
 var logger = Logger(label: "swift-yt-downloader")
 logger.logLevel = .info
 
+// Start health check server for Railway (reads PORT env var)
+if let portStr = ProcessInfo.processInfo.environment["PORT"],
+   let port = UInt16(portStr) {
+    Task { await startHealthCheckServer(port: port) }
+}
+
 let bot = try await TGBot(
     connectionType: .longpolling(),
     tgClient: TGClientDefault(),
