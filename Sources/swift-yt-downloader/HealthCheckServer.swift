@@ -1,7 +1,7 @@
 import Foundation
 
 func startHealthCheckServer(port: UInt16) async {
-    let serverFd = socket(AF_INET, SOCK_STREAM, 0)
+    let serverFd = socket(AF_INET, Int32(SOCK_STREAM), 0)
     guard serverFd >= 0 else { return }
 
     var reuse: Int32 = 1
