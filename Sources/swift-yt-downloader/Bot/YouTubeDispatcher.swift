@@ -24,7 +24,7 @@ class YouTubeDispatcher: TGDefaultDispatcher, @unchecked Sendable {
             try await bot.sendMessage(params: params)
         })
 
-        await add(TGBaseHandler({ [weak self] update in
+        await add(TGMessageHandler({ [weak self] update in
             guard let bot = self?.bot,
                   let text = update.message?.text,
                   let chatId = update.message?.chat.id,

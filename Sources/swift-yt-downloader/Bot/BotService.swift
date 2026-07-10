@@ -7,8 +7,15 @@ struct BotService: Service {
     let botId: String
 
     func run() async throws {
+        LoggingSystem.bootstrap { label in
+            var handler = StreamLogHandler.standardOutput(label: label)
+            handler.logLevel = .info
+            return handler
+        }
+
         var logger = Logger(label: "BotService")
         logger.logLevel = .info
+        logger[metadataKey: "service"] = "bot"
 
         let bot = try await TGBot(
             connectionType: .longpolling(),
@@ -23,9 +30,9 @@ struct BotService: Service {
         print("Starting swift-yt-downloader bot...")
         try await bot.start()
 
-        try await withTaskCancellationHandler {
+        await withTaskCancellationHandler {
             while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(20))
+                try? await Task.sleep(for: .seconds(3600))
             }
         } onCancel: {
             Task {
