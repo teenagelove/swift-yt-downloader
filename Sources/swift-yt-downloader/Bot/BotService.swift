@@ -7,12 +7,6 @@ struct BotService: Service {
     let botId: String
 
     func run() async throws {
-        LoggingSystem.bootstrap { label in
-            var handler = StreamLogHandler.standardOutput(label: label)
-            handler.logLevel = .info
-            return handler
-        }
-
         var logger = Logger(label: "BotService")
         logger.logLevel = .info
         logger[metadataKey: "service"] = "bot"
