@@ -37,7 +37,6 @@ enum Constants {
         static let bestAudioFormat = "bestaudio"
         static let outputToStdout = "-"
         static let printTitle = "title"
-        static let audioExtension = "m4a"
         static let maxOutputBytes = 50 * 1024 * 1024
     }
 }

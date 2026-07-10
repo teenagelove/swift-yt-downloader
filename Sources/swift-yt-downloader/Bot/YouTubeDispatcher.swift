@@ -47,7 +47,7 @@ class YouTubeDispatcher: TGDefaultDispatcher, @unchecked Sendable {
                 let (title, audioData) = try await YouTubeDownloader.downloadAudio(url: text)
                 print("[YouTube] Downloaded: \"\(title)\" (\(audioData.count) bytes)")
 
-                let inputFile = TGInputFile(filename: "\(title).\(Constants.YouTube.audioExtension)", data: audioData)
+                let inputFile = TGInputFile(filename: title, data: audioData)
                 let params = TGSendAudioParams(
                     chatId: .chat(chatId),
                     audio: .file(inputFile)
