@@ -7,7 +7,7 @@ struct BotService: Service {
     let botId: String
 
     func run() async throws {
-        var logger = Logger(label: "swift-yt-downloader")
+        var logger = Logger(label: "BotService")
         logger.logLevel = .info
 
         let bot = try await TGBot(
@@ -23,8 +23,8 @@ struct BotService: Service {
         print("Starting swift-yt-downloader bot...")
         try await bot.start()
 
-        // Service.run() must not return — this keeps the process alive
-        // until ServiceGroup receives a shutdown signal
-        try await withCheckedThrowingContinuation { (_: CheckedContinuation<Void, any Error>) in }
+        // bot.start() launches long polling in a detached Task and returns.
+        // Suspend this structured task until ServiceGroup cancels it on shutdown.
+        await withCheckedContinuation { (_: CheckedContinuation<Void, Never>) in }
     }
 }

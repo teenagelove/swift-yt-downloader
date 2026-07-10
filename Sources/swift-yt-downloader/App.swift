@@ -10,12 +10,10 @@ struct App {
             exit(1)
         }
 
-        let botService = BotService(botId: botId)
-
         let serviceGroup = ServiceGroup(
-            services: [botService],
+            services: [BotService(botId: botId)],
             gracefulShutdownSignals: [.sigterm, .sigint],
-            logger: Logger(label: "Application")
+            logger: Logger(label: "swift-yt-downloader")
         )
 
         try await serviceGroup.run()
