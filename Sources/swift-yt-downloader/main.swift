@@ -3,7 +3,7 @@ import SwiftTelegramBot
 import Logging
 
 guard let botId = ProcessInfo.processInfo.environment[Constants.Environment.telegramBotToken], !botId.isEmpty else {
-    fputs(Constants.Errors.tokenNotSet, stderr)
+    print(Constants.Errors.tokenNotSet)
     exit(1)
 }
 
