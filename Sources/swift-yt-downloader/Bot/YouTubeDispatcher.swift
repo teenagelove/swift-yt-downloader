@@ -10,45 +10,52 @@ class YouTubeDispatcher: TGDefaultDispatcher, @unchecked Sendable {
 
     override func handle() async {
         await add(TGCommandHandler(commands: [Constants.Bot.start, Constants.Bot.help]) { [weak self] update in
-            guard let bot = self?.bot else { return }
-            print("Received /start or /help command")
+            guard let bot = self?.bot,
+                  let user = update.message?.from,
+                  let chatId = update.message?.chat.id else { return }
+
+            let command = update.message?.text ?? "unknown"
+            print("[Command] \(command) from user \(user.id) (\(user.firstName) \(user.lastName ?? "")) in chat \(chatId)")
+
             let params = TGSendMessageParams(
-                chatId: .chat(update.message?.chat.id ?? 0),
+                chatId: .chat(chatId),
                 text: Constants.Messages.help
             )
             try await bot.sendMessage(params: params)
         })
 
         await add(TGBaseHandler({ [weak self] update in
-            print("Received update: \(String(describing: update.updateId))")
             guard let bot = self?.bot,
                   let text = update.message?.text,
-                  let chatId = update.message?.chat.id else {
-                print("No text or chatId in update")
-                return
-            }
+                  let chatId = update.message?.chat.id,
+                  let user = update.message?.from else { return }
 
-            print("Processing message: \(text) from chat: \(chatId)")
+            print("[Message] \"\(text)\" from user \(user.id) (\(user.firstName) \(user.lastName ?? "")) in chat \(chatId)")
 
             guard YouTubeDownloader.isYouTubeURL(text) else {
+                print("[Message] Not a YouTube URL, sending notALink")
                 let params = TGSendMessageParams(chatId: .chat(chatId), text: Constants.Messages.notALink)
                 try await bot.sendMessage(params: params)
                 return
             }
 
+            print("[YouTube] Starting download for: \(text)")
             let waitParams = TGSendMessageParams(chatId: .chat(chatId), text: Constants.Messages.wait)
             try await bot.sendMessage(params: waitParams)
 
             do {
                 let (title, audioData) = try await YouTubeDownloader.downloadAudio(url: text)
+                print("[YouTube] Downloaded: \"\(title)\" (\(audioData.count) bytes)")
+
                 let inputFile = TGInputFile(filename: "\(title).\(Constants.YouTube.audioExtension)", data: audioData)
                 let params = TGSendAudioParams(
                     chatId: .chat(chatId),
                     audio: .file(inputFile)
                 )
                 try await bot.sendAudio(params: params)
+                print("[YouTube] Audio sent to chat \(chatId)")
             } catch {
-                print("Error downloading audio: \(error)")
+                print("[YouTube] Download failed: \(error)")
                 let params = TGSendMessageParams(chatId: .chat(chatId), text: Constants.Messages.oops)
                 try await bot.sendMessage(params: params)
             }
