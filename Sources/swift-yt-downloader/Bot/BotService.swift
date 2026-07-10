@@ -23,8 +23,14 @@ struct BotService: Service {
         print("Starting swift-yt-downloader bot...")
         try await bot.start()
 
-        // bot.start() launches long polling in a detached Task and returns.
-        // Suspend this structured task until ServiceGroup cancels it on shutdown.
-        await withCheckedContinuation { (_: CheckedContinuation<Void, Never>) in }
+        try await withTaskCancellationHandler {
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .hours(1))
+            }
+        } onCancel: {
+            Task {
+                try? await bot.stop()
+            }
+        }
     }
 }
