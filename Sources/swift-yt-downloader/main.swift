@@ -46,11 +46,11 @@ print("Dispatcher added")
 print("Starting swift-yt-downloader bot...")
 do {
     try await bot.start()
-    print("bot.start() returned, keeping process alive...")
-    // bot.start() is non-blocking, keep the process alive
-    while true {
-        try await Task.sleep(for: .seconds(3600))
-    }
+    print("Bot started, long polling running in background")
 } catch {
     print("bot.start() failed with error: \(error)")
+    exit(1)
 }
+
+// Keep process alive - long polling runs in a detached Task
+dispatchMain()
