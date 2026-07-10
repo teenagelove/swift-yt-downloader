@@ -8,7 +8,7 @@ let package = Package(
         .macOS(.v13)
     ],
     dependencies: [
-        .package(url: "https://github.com/nerzh/swift-telegram-bot.git", from: "4.0.0"),
+        .package(url: "https://github.com/nerzh/swift-telegram-bot.git", from: "10.0.0"),
         .package(url: "https://github.com/swiftlang/swift-subprocess.git", "0.4.0"..<"0.5.0")
     ],
     targets: [

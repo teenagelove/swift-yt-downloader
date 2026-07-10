@@ -1,5 +1,5 @@
 {
-  "originHash" : "ed90b23e4f62a648d3841df2df977e09c72390eb4a2175beb9cffd70071303d8",
+  "originHash" : "2dcaa70b5086442f82d380193e31c78c7fd33bc298bbeb16a46e0c555c60c11d",
   "pins" : [
     {
       "identity" : "swift-custom-logger",
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nerzh/swift-telegram-bot.git",
       "state" : {
-        "revision" : "a3ee4578cc249e80619fe6a4929d704e4a9d6fb9",
-        "version" : "4.6.0"
+        "revision" : "dfbead9cab0741ccefc3e03dbcfb2aff051a1785",
+        "version" : "10.1.0"
       }
     }
   ],
