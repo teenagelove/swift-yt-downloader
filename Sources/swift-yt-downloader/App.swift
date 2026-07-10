@@ -11,7 +11,10 @@ struct App {
             return handler
         }
 
-        guard let botId = ProcessInfo.processInfo.environment[Constants.Environment.telegramBotToken], !botId.isEmpty else {
+        guard
+            let botId = ProcessInfo.processInfo.environment[Constants.Environment.telegramBotToken],
+            !botId.isEmpty
+        else {
             print(Constants.Errors.tokenNotSet)
             exit(1)
         }

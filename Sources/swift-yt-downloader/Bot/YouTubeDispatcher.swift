@@ -15,7 +15,8 @@ class YouTubeDispatcher: TGDefaultDispatcher, @unchecked Sendable {
             guard let bot = self?.bot,
                   let logger = self?.logger,
                   let user = update.message?.from,
-                  let chatId = update.message?.chat.id else { return }
+                  let chatId = update.message?.chat.id
+            else { return }
 
             let command = update.message?.text ?? "unknown"
             logger.info("[Command] \(command) from user \(user.id) (\(user.firstName) \(user.lastName ?? "")) in chat \(chatId)")
@@ -32,7 +33,9 @@ class YouTubeDispatcher: TGDefaultDispatcher, @unchecked Sendable {
                   let logger = self?.logger,
                   let text = update.message?.text,
                   let chatId = update.message?.chat.id,
-                  let user = update.message?.from else { return }
+                  let user = update.message?.from,
+                  !text.hasPrefix("/")
+            else { return }
 
             logger.info("[Message] \"\(text)\" from user \(user.id) (\(user.firstName) \(user.lastName ?? "")) in chat \(chatId)")
 
@@ -48,7 +51,7 @@ class YouTubeDispatcher: TGDefaultDispatcher, @unchecked Sendable {
             try await bot.sendMessage(params: waitParams)
 
             do {
-                let (title, audioData) = try await YouTubeDownloader.downloadAudio(url: text)
+                let (title, audioData) = try await YouTubeDownloader.downloadAudio(url: text, logger: logger)
                 logger.info("[YouTube] Downloaded: \"\(title)\" (\(audioData.count) bytes)")
 
                 let inputFile = TGInputFile(filename: title, data: audioData)

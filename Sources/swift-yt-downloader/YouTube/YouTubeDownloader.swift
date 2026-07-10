@@ -1,5 +1,6 @@
 import Foundation
 import Subprocess
+import Logging
 
 enum YouTubeDownloader {
 
@@ -20,38 +21,49 @@ enum YouTubeDownloader {
         return false
     }
 
-    static func getTitle(url: String) async throws -> String {
+    static func getTitle(url: String, logger: Logger? = nil) async throws -> String {
         let result = try await run(
             .name(Constants.YouTube.ytdlp),
             arguments: ["--print", Constants.YouTube.printTitle, url],
             output: .string(limit: 1024),
-            error: .discarded
+            error: .string(limit: 1024)
         )
+
+        if let stderr = result.standardError, !stderr.isEmpty {
+            logger?.error("yt-dlp getTitle stderr: \(stderr)")
+        }
 
         guard result.terminationStatus == .exited(0),
               let title = result.standardOutput else {
+            logger?.error("yt-dlp getTitle failed with status: \(result.terminationStatus)")
             throw DownloadError.titleFetchFailed
         }
 
         return sanitizeFilename(title.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 
-    static func downloadAudio(url: String) async throws -> (title: String, data: Data) {
-        let title = try await getTitle(url: url)
+    static func downloadAudio(url: String, logger: Logger? = nil) async throws -> (title: String, data: Data) {
+        let title = try await getTitle(url: url, logger: logger)
 
         let result = try await run(
             .name(Constants.YouTube.ytdlp),
             arguments: ["-f", Constants.YouTube.bestAudioFormat, "-o", Constants.YouTube.outputToStdout, url],
             output: .data(limit: Constants.YouTube.maxOutputBytes),
-            error: .discarded
+            error: .string(limit: 4096)
         )
 
+        if let stderr = result.standardError, !stderr.isEmpty {
+            logger?.error("yt-dlp download stderr: \(stderr)")
+        }
+
         guard result.terminationStatus == .exited(0) else {
+            logger?.error("yt-dlp download failed with status: \(result.terminationStatus)")
             throw DownloadError.ytDlpDownloadFailed
         }
 
         let audioData = result.standardOutput
         guard !audioData.isEmpty else {
+            logger?.error("yt-dlp produced empty output")
             throw DownloadError.emptyOutput
         }
 
