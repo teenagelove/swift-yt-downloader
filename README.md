@@ -2,11 +2,15 @@
 
 A lightweight Swift-based Telegram bot that extracts and downloads audio from YouTube links.
 
-[![Swift Version](https://img.shields.io/badge/Swift-6.1-F05138?logo=swift&logoColor=white)](https://swift.org)
-[![SwiftTelegramBot](https://img.shields.io/badge/SwiftTelegramBot-4.6-blue)](https://github.com/nerzh/swift-telegram-bot)
-[![Subprocess](https://img.shields.io/badge/Subprocess-0.5-FF6B35)](https://github.com/swiftlang/swift-subprocess)
-[![yt-dlp](https://img.shields.io/badge/yt-dlp-latest-FF1D15?logo=youtube&logoColor=white)](https://github.com/yt-dlp/yt-dlp)
-[![Docker](https://img.shields.io/badge/Docker-Multi--Stage-2496ED?logo=docker&logoColor=white)](https://www.docker.com)
+<p align="left">
+  <img src="https://img.shields.io/badge/Swift-6.1-F05138?logo=swift&logoColor=white" alt="Swift 6.1"/>
+  <img src="https://img.shields.io/badge/Async_Await-5856D6?logo=swift&logoColor=white" alt="Async/Await"/>
+  <img src="https://img.shields.io/badge/TelegramBot-4.6-26A5E4?logo=telegram&logoColor=white" alt="Telegram Bot"/>
+  <img src="https://img.shields.io/badge/Subprocess-0.5-FF6B35?logo=apple&logoColor=white" alt="Subprocess"/>
+  <img src="https://img.shields.io/badge/yt--dlp-latest-FF1D15?logo=youtube&logoColor=white" alt="yt-dlp"/>
+  <img src="https://img.shields.io/badge/Docker-Multi--Stage-2496ED?logo=docker&logoColor=white" alt="Docker"/>
+  <img src="https://img.shields.io/badge/Conventional_Commits-FE5196?logo=git&logoColor=white" alt="Conventional Commits"/>
+</p>
 
 ## Features
 
@@ -21,7 +25,7 @@ A lightweight Swift-based Telegram bot that extracts and downloads audio from Yo
 - Entry point: `main.swift` — bot initialization and update loop
 - Bot routing: `Bot/YouTubeDispatcher.swift` — command registration and message handling
 - YouTube logic: `YouTube/YouTubeDownloader.swift` — URL validation and audio download
-- Constants: `Constants/Messages.swift` — user-facing text constants
+- Constants: `Constants/Constants.swift` — centralized configuration and text constants
 - Build: `Package.swift` (SPM) + `Dockerfile` for containerized deployment
 
 ## Prerequisites
@@ -93,7 +97,7 @@ docker run -e TELEGRAM_BOT_TOKEN="your-token-here" swift-yt-downloader
 │   ├── YouTube/
 │   │   └── YouTubeDownloader.swift # URL validation & audio download
 │   └── Constants/
-│       └── Messages.swift         # User-facing text constants
+│       └── Constants.swift        # Centralized constants
 ├── Package.swift                  # SPM package definition
 ├── Dockerfile                     # Multi-stage container build
 ├── .gitignore
