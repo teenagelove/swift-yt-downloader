@@ -25,7 +25,7 @@ struct BotService: Service {
 
         try await withTaskCancellationHandler {
             while !Task.isCancelled {
-                try? await Task.sleep(for: .hours(1))
+                try? await Task.sleep(for: .seconds(20))
             }
         } onCancel: {
             Task {
